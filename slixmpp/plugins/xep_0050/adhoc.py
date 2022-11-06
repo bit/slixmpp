@@ -620,6 +620,8 @@ class XEP_0050(BasePlugin):
 
 
 async def _await_if_needed(handler, *args):
+    if handler is None:
+        raise XMPPError("bad-request", text="The command is completed")
     if asyncio.iscoroutinefunction(handler):
         log.debug(f"%s is async", handler)
         return await handler(*args)
