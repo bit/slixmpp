@@ -299,8 +299,8 @@ class XMLStream(asyncio.BaseProtocol):
         self.scheduled_events = {}
 
         self.ssl_context = ssl.create_default_context()
-        self.ssl_context.check_hostname = False
-        self.ssl_context.verify_mode = ssl.CERT_NONE
+        self.ssl_context.check_hostname = True
+        self.ssl_context.verify_mode = ssl.CERT_REQUIRED
 
         self.event_when_connected = "connected"
 
@@ -484,11 +484,12 @@ class XMLStream(asyncio.BaseProtocol):
         if self._current_connection_attempt is None:
             return
         try:
+            server_hostname = self.default_domain if self.use_ssl else None
             await self.loop.create_connection(lambda: self,
                                                    self.address[0],
                                                    self.address[1],
                                                    ssl=ssl_context,
-                                                   server_hostname=self.default_domain if self.use_ssl else None)
+                                                   server_hostname=server_hostname)
             self._connect_loop_wait = 0
         except Socket.gaierror as e:
             self.event('connection_failed',
@@ -827,15 +828,15 @@ class XMLStream(asyncio.BaseProtocol):
         try:
             if hasattr(self.loop, 'start_tls'):
                 transp = await self.loop.start_tls(self.transport,
-                                                   self, ssl_context)
+                                                   self, ssl_context,
+                                                   server_hostname=self.default_domain)
             # Python < 3.7
             else:
                 transp, _ = await self.loop.create_connection(
                     lambda: self,
                     ssl=self.ssl_context,
                     sock=self.socket,
-                    server_hostname=self.default_domain
-                )
+                    server_hostname=self.default_domain)
         except ssl.SSLError as e:
             log.debug('SSL: Unable to connect', exc_info=True)
             log.error('CERT: Invalid certificate trust chain.')
