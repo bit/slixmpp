@@ -61,5 +61,15 @@ class TestReply(SlixTest):
             """
         )
 
+    def testGetFallBackBody(self):
+        body = "Anna wrote:\nHi, how are you?"
+        quoted = "> Anna wrote:\n> Hi, how are you?\n"
+
+        msg = Message()
+        msg["body"] = "Great"
+        msg["feature_fallback"].add_quoted_fallback(body)
+        body2 = msg["feature_fallback"].get_fallback_body()
+        self.assertTrue(body2 == quoted, body2)
+
 
 suite = unittest.TestLoader().loadTestsFromTestCase(TestReply)

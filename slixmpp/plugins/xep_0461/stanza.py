@@ -18,6 +18,16 @@ class FeatureFallBack(ElementBase):
     plugin_attrib = "feature_fallback"
     interfaces = {"for"}
 
+    def get_fallback_body(self):
+        # only works for a single fallback_body attrib
+        start = self["fallback_body"]["start"]
+        end = self["fallback_body"]["end"]
+        body = self.parent()["body"]
+        if start < end < len(body):
+            return body[start:end]
+        else:
+            return ""
+
     def get_stripped_body(self):
         # only works for a single fallback_body attrib
         start = self["fallback_body"]["start"]
