@@ -23,13 +23,10 @@ class FeatureFallBack(ElementBase):
         start = self["fallback_body"]["start"]
         end = self["fallback_body"]["end"]
         body = self.parent()["body"]
-        try:
-            start = int(start)
-            end = int(end)
-        except ValueError:
-            return body
-        else:
+        if start < end < len(body):
             return body[:start] + body[end:]
+        else:
+            return body
 
 
 class FallBackBody(ElementBase):
@@ -39,6 +36,24 @@ class FallBackBody(ElementBase):
     name = "body"
     plugin_attrib = "fallback_body"
     interfaces = {"start", "end"}
+
+    def set_start(self, v: int):
+        self._set_attr("start", str(v))
+
+    def get_start(self):
+        try:
+            return int(self._get_attr("start"))
+        except ValueError:
+            return 0
+
+    def set_end(self, v: int):
+        self._set_attr("end", str(v))
+
+    def get_end(self):
+        try:
+            return int(self._get_attr("end"))
+        except ValueError:
+            return 0
 
 
 def register_plugins():

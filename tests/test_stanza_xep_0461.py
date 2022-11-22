@@ -27,8 +27,8 @@ class TestReply(SlixTest):
         message = Message()
         message["body"] = "12345\nrealbody"
         message["feature_fallback"]["for"] = "NS"
-        message["feature_fallback"]["fallback_body"]["start"] = "0"
-        message["feature_fallback"]["fallback_body"]["end"] = "6"
+        message["feature_fallback"]["fallback_body"]["start"] = 0
+        message["feature_fallback"]["fallback_body"]["end"] = 6
 
         self.check(
             message,
