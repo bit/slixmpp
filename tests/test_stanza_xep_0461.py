@@ -44,5 +44,22 @@ class TestReply(SlixTest):
 
         assert message["feature_fallback"].get_stripped_body() == "realbody"
 
+    def testAddFallBackHelper(self):
+        msg = Message()
+        msg["body"] = "Great"
+        msg["feature_fallback"].add_quoted_fallback("Anna wrote:\nHi, how are you?")
+        # ugly dedent but the test does not pass without it
+        self.check(
+            msg,
+            """
+        <message xmlns="jabber:client" type="normal">
+            <body>> Anna wrote:\n> Hi, how are you?\nGreat</body>
+            <fallback xmlns="urn:xmpp:feature-fallback:0" for="urn:xmpp:reply:0">
+                <body start='0' end='33' />
+            </fallback>
+        </message>
+            """
+        )
+
 
 suite = unittest.TestLoader().loadTestsFromTestCase(TestReply)

@@ -28,6 +28,14 @@ class FeatureFallBack(ElementBase):
         else:
             return body
 
+    def add_quoted_fallback(self, fallback: str):
+        msg = self.parent()
+        quoted = "\n".join("> " + x.strip() for x in fallback.split("\n")) + "\n"
+        msg["body"] = quoted + msg["body"]
+        msg["feature_fallback"]["for"] = NS
+        msg["feature_fallback"]["fallback_body"]["start"] = 0
+        msg["feature_fallback"]["fallback_body"]["end"] = len(quoted)
+
 
 class FallBackBody(ElementBase):
     # According to https://xmpp.org/extensions/inbox/compatibility-fallback.html
