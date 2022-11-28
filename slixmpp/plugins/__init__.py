@@ -79,6 +79,7 @@ __all__ = [
 #   'xep_0270',  # XMPP Compliance Suites 2010. Don’t automatically load
     'xep_0279',  # Server IP Check
     'xep_0280',  # Message Carbons
+    'xep_0292',  # vCard4 Over XMPP
     'xep_0297',  # Stanza Forwarding
     'xep_0300',  # Use of Cryptographic Hash Functions in XMPP
 #   'xep_0302',  # XMPP Compliance Suites 2012. Don’t automatically load
