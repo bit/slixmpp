@@ -23,8 +23,8 @@ class FeatureFallBack(ElementBase):
         start = self["fallback_body"]["start"]
         end = self["fallback_body"]["end"]
         body = self.parent()["body"]
-        if start < end < len(body):
-            return body[start:end]
+        if start <= end:
+            return body[start:end+1]
         else:
             return ""
 
@@ -33,7 +33,7 @@ class FeatureFallBack(ElementBase):
         start = self["fallback_body"]["start"]
         end = self["fallback_body"]["end"]
         body = self.parent()["body"]
-        if start < end < len(body):
+        if start <= end < len(body):
             return body[:start] + body[end:]
         else:
             return body
@@ -44,7 +44,7 @@ class FeatureFallBack(ElementBase):
         msg["body"] = quoted + msg["body"]
         msg["feature_fallback"]["for"] = NS
         msg["feature_fallback"]["fallback_body"]["start"] = 0
-        msg["feature_fallback"]["fallback_body"]["end"] = len(quoted)
+        msg["feature_fallback"]["fallback_body"]["end"] = len(quoted) - 1
 
 
 class FallBackBody(ElementBase):
