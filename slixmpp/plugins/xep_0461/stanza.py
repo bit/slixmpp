@@ -18,18 +18,33 @@ class FeatureFallBack(ElementBase):
     plugin_attrib = "feature_fallback"
     interfaces = {"for"}
 
+    def get_fallback_body(self):
+        # only works for a single fallback_body attrib
+        start = self["fallback_body"]["start"]
+        end = self["fallback_body"]["end"]
+        body = self.parent()["body"]
+        if start <= end:
+            return body[start:end+1]
+        else:
+            return ""
+
     def get_stripped_body(self):
         # only works for a single fallback_body attrib
         start = self["fallback_body"]["start"]
         end = self["fallback_body"]["end"]
         body = self.parent()["body"]
-        try:
-            start = int(start)
-            end = int(end)
-        except ValueError:
-            return body
-        else:
+        if start <= end < len(body):
             return body[:start] + body[end:]
+        else:
+            return body
+
+    def add_quoted_fallback(self, fallback: str):
+        msg = self.parent()
+        quoted = "\n".join("> " + x.strip() for x in fallback.split("\n")) + "\n"
+        msg["body"] = quoted + msg["body"]
+        msg["feature_fallback"]["for"] = NS
+        msg["feature_fallback"]["fallback_body"]["start"] = 0
+        msg["feature_fallback"]["fallback_body"]["end"] = len(quoted) - 1
 
 
 class FallBackBody(ElementBase):
@@ -39,6 +54,24 @@ class FallBackBody(ElementBase):
     name = "body"
     plugin_attrib = "fallback_body"
     interfaces = {"start", "end"}
+
+    def set_start(self, v: int):
+        self._set_attr("start", str(v))
+
+    def get_start(self):
+        try:
+            return int(self._get_attr("start"))
+        except ValueError:
+            return 0
+
+    def set_end(self, v: int):
+        self._set_attr("end", str(v))
+
+    def get_end(self):
+        try:
+            return int(self._get_attr("end"))
+        except ValueError:
+            return 0
 
 
 def register_plugins():

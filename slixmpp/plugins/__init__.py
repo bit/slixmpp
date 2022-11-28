@@ -113,4 +113,5 @@ __all__ = [
     'xep_0439',  # Quick Response
     'xep_0441',  # Message Archive Management Preferences
     'xep_0444',  # Message Reactions
+    'xep_0461',  # Message Replies
 ]
