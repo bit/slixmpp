@@ -84,7 +84,7 @@ MAMDefault = Literal['always', 'never', 'roster']
 FilterString = Literal['in', 'out', 'out_sync']
 
 __all__ = [
-    'Protocol', 'TypedDict', 'Literal', 'OptJid', 'JidStr', 'MAMDefault',
+    'Protocol', 'TypedDict', 'Literal', 'OptJid', 'OptJidStr', 'JidStr', 'MAMDefault',
     'PresenceTypes', 'PresenceShows', 'MessageTypes', 'IqTypes', 'MucRole',
     'MucAffiliation', 'FilterString',
 ]

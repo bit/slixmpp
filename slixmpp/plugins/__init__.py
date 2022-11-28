@@ -114,4 +114,6 @@ __all__ = [
     'xep_0441',  # Message Archive Management Preferences
     'xep_0444',  # Message Reactions
     'xep_0461',  # Message Replies
+    # Meant to be imported by plugins
+    'BasePlugin'
 ]
