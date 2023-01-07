@@ -323,7 +323,6 @@ class XEP_0045(BasePlugin):
 
         def add_message(msg: Message):
             delay = msg.get_plugin('delay', check=True)
-            print(delay)
             if delay is not None and delay['from'] == room:
                 history_buffer.append(msg)
 
