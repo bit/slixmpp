@@ -19,6 +19,8 @@ def _extract_data(data, kind):
     stripped = []
     begin_headers = False
     begin_data = False
+    if isinstance(data, bytes):
+        data = data.decode()
     for line in data.split('\n'):
         if not begin_headers and 'BEGIN PGP %s' % kind in line:
             begin_headers = True
