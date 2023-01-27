@@ -100,12 +100,16 @@ class XEP_0027(BasePlugin):
     def sign(self, data, jid=None):
         keyid = self._get_keyid(jid, None, None, None)
         if keyid:
+            if isinstance(data, str):
+                data = data.encode()
             signed = self.gpg.sign(data, keyid=keyid)
             return _extract_data(signed.data, 'SIGNATURE')
 
     def encrypt(self, data, jid=None):
         keyid = self._get_keyid(jid, None, None, None)
         if keyid:
+            if isinstance(data, str):
+                data = data.encode()
             enc = self.gpg.encrypt(data, keyid)
             return _extract_data(enc.data, 'MESSAGE')
 
