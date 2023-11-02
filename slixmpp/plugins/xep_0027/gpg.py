@@ -98,13 +98,13 @@ class XEP_0027(BasePlugin):
         return stanza
 
     def sign(self, data, jid=None):
-        keyid = self.get_keyid(jid)
+        keyid = self._keyids.get(jid, None)
         if keyid:
             signed = self.gpg.sign(data, keyid=keyid)
             return _extract_data(signed.data, 'SIGNATURE')
 
     def encrypt(self, data, jid=None):
-        keyid = self.get_keyid(jid)
+        keyid = self._keyids.get(jid, None)
         if keyid:
             enc = self.gpg.encrypt(data, keyid)
             return _extract_data(enc.data, 'MESSAGE')
@@ -167,7 +167,7 @@ class XEP_0027(BasePlugin):
     def _handle_unverified_signed_presence(self, pres):
         verified = self.verify(pres['status'], pres['signed'])
         if verified.key_id:
-            if not self.get_keyid(pres['from']):
+            if not self._keyids.get(pres['from'], None):
                 known_keyids = [e['keyid'] for e in self.gpg.list_keys()]
                 if verified.key_id not in known_keyids:
                     self.gpg.recv_keys(self.key_server, verified.key_id)
